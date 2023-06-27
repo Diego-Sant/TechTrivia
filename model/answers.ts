@@ -29,6 +29,11 @@ export default class AnswersModel {
         return this.#revealed
     }
 
+    revealAnswer() {
+        return new AnswersModel(this.#value, this.#corrects, true)
+    }
+
+    // Configurações que irão aparecer no json de cada resposta
     toObject() {
         return {
             value: this.#value,
