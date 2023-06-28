@@ -19,7 +19,7 @@ export default function Questionnaire(props: QuestionnaireProps) {
     return (
         <div className="flex flex-col justify-center items-center h-[100vh]">
             {props.question ? (
-                <Questions value={props.question} timeToAnswer={15} onResponse={onResponse} timeOver={props.runOutTime}/>
+                <Questions value={props.question} timeToAnswer={20} onResponse={onResponse} timeOver={props.runOutTime}/>
             ) : (
                 false
             )}

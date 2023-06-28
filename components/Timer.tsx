@@ -3,6 +3,7 @@ import { CountdownCircleTimer } from "react-countdown-circle-timer"
 interface TimerProps {
     duration: number
     timeOver: () => void
+    key: any
 }
 
 export default function Timer(props: TimerProps) {

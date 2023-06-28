@@ -1,23 +1,16 @@
-import Button from "@/components/Button";
 import Questionnaire from "@/components/Questionnaire";
-import Questions from "@/components/Questions";
-import AnswersModel from "@/model/answers";
 import QuestionModel from "@/model/question";
-import { useEffect, useRef, useState } from "react";
-
-
-const questionnaire = new QuestionModel(1, "Questãooooooooo", [
-  AnswersModel.wrong('Azul'),
-  AnswersModel.correct('Preto'),
-  AnswersModel.wrong('Verde'),
-  AnswersModel.wrong('Amarelo')
-])
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 
 const BASE_URL = "http://localhost:3000/api"
 
 export default function Home() {
+  const router = useRouter()
+
   const [questionsIds, setQuestionIds] = useState<number[]>([])
-  const [question, setQuestion] = useState<QuestionModel>(questionnaire)
+  const [question, setQuestion] = useState<QuestionModel>()
+  const [correctQuestions, setCorrectQuestions] = useState<number>(0)
 
   async function loadIds() {
     const res = await fetch(`${BASE_URL}/questionario`)
@@ -28,8 +21,9 @@ export default function Home() {
 
   async function loadQuestion(questionId: number) {
     const res = await fetch(`${BASE_URL}/questoes/${questionId}`)
-    const jsontest = await res.json()
-    console.log(jsontest.answers)
+    const json = await res.json()
+    const newQuestion = QuestionModel.createUsingObject(json)
+    setQuestion(newQuestion)
   }
 
   useEffect(() => {
@@ -40,15 +34,43 @@ export default function Home() {
     questionsIds.length > 0 && loadQuestion(questionsIds[0])
   }, [questionsIds])
 
-  function answeredQuestion(question: QuestionModel) {
+  function answeredQuestion(answeredQuestion: QuestionModel) {
+    setQuestion(answeredQuestion)
+    const correct = answeredQuestion.correct
+    setCorrectQuestions(correctQuestions + (correct ? 1 : 0))
+  }
 
+  function nextQuestionId() {
+    if(question) {
+      const nextIndex = questionsIds.indexOf(question.id) + 1
+      return questionsIds[nextIndex]
+    }
   }
 
   function runOutTime() {
+    const nextId = nextQuestionId()
+    nextId ? goNextQuestion(nextId) : ending()
+  }
 
+  function goNextQuestion(nextId: number) {
+    loadQuestion(nextId)
+  }
+
+  function ending() {
+    router.push({
+      pathname: "/resultado",
+      query: {
+        total: questionsIds.length,
+        corretos: correctQuestions
+      }
+    })
   }
 
   return (
-        <Questionnaire question={question} lastQuestion={false} answeredQuestion={answeredQuestion} runOutTime={runOutTime}/>
+        <>
+          {question && (
+            <Questionnaire question={question} lastQuestion={nextQuestionId() === undefined} answeredQuestion={answeredQuestion} runOutTime={runOutTime}/>
+          )}
+        </>
   )
 }

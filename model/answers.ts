@@ -21,7 +21,7 @@ export default class AnswersModel {
         return this.#value
     }
 
-    get correct() {
+    get corrects() {
         return this.#corrects
     }
 
@@ -31,6 +31,10 @@ export default class AnswersModel {
 
     revealAnswer() {
         return new AnswersModel(this.#value, this.#corrects, true)
+    }
+
+    static createUsingObject(model: AnswersModel): AnswersModel {
+        return new AnswersModel(model.value, model.corrects, model.revealed)
     }
 
     // Configurações que irão aparecer no json de cada resposta

@@ -29,3 +29,24 @@ body {
   box-sizing: border-box;
   font-family: "Poppins", sans-serif;
 }
+
+.perspective {
+  perspective: 1000px;
+}
+
+.webkit {
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+
+.rotating {
+  transform: rotateY(180deg);
+}
+
+.transform3d {
+  transform-style: preserve-3d;
+}
+
+.transformtransition {
+  transition: transform 0.8s;
+}

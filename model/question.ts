@@ -46,10 +46,10 @@ export default class QuestionModel {
 
     answerWith(index: number): QuestionModel {
         // Lógica para identificar se o usuário escolheu a resposta certa, caso não, irá mostrar qual seria
-        const corrected = this.#answers[index]?.correct
+        const corrected = this.#answers[index]?.corrects
         const answered = this.#answers.map((answer, i) => {
             const selectedAnswer = index === i
-            const shouldReveal = selectedAnswer || answer.correct // Caso retire o answer.correct e o corrected, não irá mostrar a resposta certa
+            const shouldReveal = selectedAnswer || answer.corrects // Caso retire o answer.correct e o corrected, não irá mostrar a resposta certa
             return shouldReveal ? answer.revealAnswer() : answer
         })
 
@@ -60,6 +60,11 @@ export default class QuestionModel {
     randomizeAnswers(): QuestionModel {
         let answersRandomized = randomize(this.#answers)
         return new QuestionModel(this.#id, this.#question, answersRandomized, this.#correct)
+    }
+
+    static createUsingObject(model: QuestionModel): QuestionModel {
+        const answers = model.answers.map(res => AnswersModel.createUsingObject(res))
+        return new QuestionModel(model.id, model.question, answers, model.correct)
     }
 
     // Configurações que irão aparecer no json de cada questão

@@ -22,14 +22,14 @@ export default function Questions(props: QuestionsProps) {
 
     function renderAnswers() {
         return question.answers.map((answer, i) => {
-            return <Answer key={i} value={answer} index={i} options={options[i].value} backgroundColor={options[i].backgroundColor} onResponse={props.onResponse} />
+            return <Answer key={`${question.id}${i}`} value={answer} index={i} options={options[i].value} backgroundColor={options[i].backgroundColor} onResponse={props.onResponse} />
         })
     }
 
     return (
         <div className="flex flex-col items-center">
             <Question text={question.question} />
-            <Timer duration={props.timeToAnswer ?? 15} timeOver={props.timeOver} />
+            <Timer key={question.id} duration={props.timeToAnswer ?? 15} timeOver={props.timeOver} />
             {renderAnswers()}
         </div>
     )
