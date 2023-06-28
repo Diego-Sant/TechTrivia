@@ -3,7 +3,7 @@ import QuestionModel from "@/model/question";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
-const BASE_URL = "http://localhost:3000/api"
+const BASE_URL = "https://tech-trivia.vercel.app/api"
 
 export default function Home() {
   const router = useRouter()
